@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ParuScan AI — Skrining Suara Paru Berbasis AI",
+  title: "PulmoSense — Skrining Suara Paru Berbasis AI",
   description:
     "Platform skrining suara paru berbasis kecerdasan buatan untuk membantu tenaga medis dalam deteksi dini kelainan paru.",
 };

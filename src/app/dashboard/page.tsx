@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/table";
 import {
   Bell,
-  Plus,
   BarChart3,
   ShieldAlert,
   ShieldCheck,
@@ -31,73 +30,15 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { prisma } from "@/lib/prisma";
+import { requireUser } from "@/lib/auth/session";
+import { formatDateTime } from "@/lib/analysis-format";
+
+export const dynamic = "force-dynamic";
 
 /* ================================================================== */
-/*  Static Data                                                        */
+/*  Static Data – Workflow steps (informational, no DB needed)          */
 /* ================================================================== */
-
-const stats = [
-  {
-    label: "Total Analisis",
-    value: "1,248",
-    icon: BarChart3,
-    gradient: "from-teal-500 to-cyan-500",
-    iconBg: "bg-teal-50",
-    iconText: "text-teal-600",
-    shadow: "shadow-teal-500/10",
-  },
-  {
-    label: "Indikasi Pneumonia",
-    value: "342",
-    icon: ShieldAlert,
-    gradient: "from-rose-500 to-pink-500",
-    iconBg: "bg-rose-50",
-    iconText: "text-rose-600",
-    shadow: "shadow-rose-500/10",
-  },
-  {
-    label: "Hasil Normal",
-    value: "856",
-    icon: ShieldCheck,
-    gradient: "from-emerald-500 to-teal-500",
-    iconBg: "bg-emerald-50",
-    iconText: "text-emerald-600",
-    shadow: "shadow-emerald-500/10",
-  },
-  {
-    label: "Confidence Rendah",
-    value: "50",
-    icon: AlertTriangle,
-    gradient: "from-amber-500 to-orange-500",
-    iconBg: "bg-amber-50",
-    iconText: "text-amber-600",
-    shadow: "shadow-amber-500/10",
-  },
-];
-
-const recentAnalyses = [
-  {
-    id: 1,
-    date: "24 Okt 2023",
-    fileName: "px_104_crackle.wav",
-    result: "Pneumonia" as const,
-    confidence: 94,
-  },
-  {
-    id: 2,
-    date: "24 Okt 2023",
-    fileName: "px_105_normal.wav",
-    result: "Normal" as const,
-    confidence: 88,
-  },
-  {
-    id: 3,
-    date: "23 Okt 2023",
-    fileName: "px_106_wheeze.wav",
-    result: "Pneumonia" as const,
-    confidence: 65,
-  },
-];
 
 const workflowSteps = [
   {
@@ -134,14 +75,78 @@ const workflowSteps = [
 /*  Page Component                                                     */
 /* ================================================================== */
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const user = await requireUser();
+  const firstName = user.name.split(" ")[0];
+
+  /* ---------- parallel database queries ---------- */
+  const [totalCount, pneumoniaCount, normalCount, lowConfidenceCount, recentAnalyses] =
+    await Promise.all([
+      prisma.analysis.count(),
+      prisma.analysis.count({
+        where: { prediction: { equals: "PNEUMONIA", mode: "insensitive" } },
+      }),
+      prisma.analysis.count({
+        where: { prediction: { equals: "NORMAL", mode: "insensitive" } },
+      }),
+      prisma.analysis.count({
+        where: { confidence: { lt: 70 } },
+      }),
+      prisma.analysis.findMany({
+        orderBy: { createdAt: "desc" },
+        take: 5,
+        select: {
+          id: true,
+          audioFileName: true,
+          prediction: true,
+          confidence: true,
+          createdAt: true,
+        },
+      }),
+    ]);
+
+  const stats = [
+    {
+      label: "Total Analisis",
+      value: totalCount.toLocaleString("id-ID"),
+      icon: BarChart3,
+      iconBg: "bg-teal-50",
+      iconText: "text-teal-600",
+      shadow: "shadow-teal-500/10",
+    },
+    {
+      label: "Indikasi Pneumonia",
+      value: pneumoniaCount.toLocaleString("id-ID"),
+      icon: ShieldAlert,
+      iconBg: "bg-rose-50",
+      iconText: "text-rose-600",
+      shadow: "shadow-rose-500/10",
+    },
+    {
+      label: "Hasil Normal",
+      value: normalCount.toLocaleString("id-ID"),
+      icon: ShieldCheck,
+      iconBg: "bg-emerald-50",
+      iconText: "text-emerald-600",
+      shadow: "shadow-emerald-500/10",
+    },
+    {
+      label: "Confidence Rendah",
+      value: lowConfidenceCount.toLocaleString("id-ID"),
+      icon: AlertTriangle,
+      iconBg: "bg-amber-50",
+      iconText: "text-amber-600",
+      shadow: "shadow-amber-500/10",
+    },
+  ];
+
   return (
     <div className="space-y-6 p-8">
       {/* ==================== HEADER ==================== */}
       <header className="flex items-start justify-between">
         <div className="animate-fade-in-up space-y-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            Selamat Datang di PulmoSense
+            Selamat Datang, {firstName}
           </h1>
           <p className="text-sm text-muted-foreground">
             Sistem Analisis Suara Paru-Paru berbasis AI (VGG16).
@@ -234,34 +239,62 @@ export default function DashboardPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {recentAnalyses.map((row) => (
-                  <TableRow key={row.id} className="group/row cursor-pointer">
-                    <TableCell className="text-muted-foreground">
-                      {row.date}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2 font-medium">
-                        <FileAudio2 className="h-4 w-4 shrink-0 text-muted-foreground" />
-                        <span className="truncate">{row.fileName}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <ResultBadge result={row.result} />
-                    </TableCell>
-                    <TableCell>
-                      <ConfidenceBar value={row.confidence} />
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="rounded-lg text-teal-600 opacity-0 transition-opacity group-hover/row:opacity-100"
-                      >
-                        Detail
-                      </Button>
+                {recentAnalyses.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={5}
+                      className="h-32 text-center text-sm text-muted-foreground"
+                    >
+                      Belum ada hasil analisis. Mulai analisis pertama Anda!
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  recentAnalyses.map((row) => {
+                    const dateTime = formatDateTime(row.createdAt);
+                    const isPneumonia =
+                      row.prediction.toUpperCase() === "PNEUMONIA";
+
+                    return (
+                      <TableRow key={row.id} className="group/row cursor-pointer">
+                        <TableCell className="text-muted-foreground">
+                          <div className="font-medium text-foreground">
+                            {dateTime.date}
+                          </div>
+                          <div className="mt-0.5 text-xs">
+                            {dateTime.time}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2 font-medium">
+                            <FileAudio2 className="h-4 w-4 shrink-0 text-muted-foreground" />
+                            <span className="truncate">{row.audioFileName}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <ResultBadge
+                            result={isPneumonia ? "Pneumonia" : "Normal"}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <ConfidenceBar value={row.confidence} />
+                        </TableCell>
+                        <TableCell>
+                          <Link
+                            href={`/dashboard/riwayat-analisis/detail?id=${row.id}`}
+                          >
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="rounded-lg text-teal-600 opacity-0 transition-opacity group-hover/row:opacity-100"
+                            >
+                              Detail
+                            </Button>
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                )}
               </TableBody>
             </Table>
           </CardContent>
@@ -347,7 +380,7 @@ function ConfidenceBar({ value }: { value: number }) {
         />
       </div>
       <span className="text-xs font-semibold tabular-nums text-muted-foreground">
-        {value}%
+        {value.toFixed(1)}%
       </span>
     </div>
   );

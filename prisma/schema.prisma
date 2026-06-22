@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String     @id @default(cuid())
+  name         String
+  email        String     @unique
+  passwordHash String?
+  role         String     @default("admin")
+  analyses     Analysis[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Analysis {
+  id String @id @default(cuid())
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  audioFileName String
+  patientName   String?
+  audioPath     String?
+  duration      Float?
+  sampleRate    Int?
+  fileSize      Int?
+
+  prediction     String
+  confidence     Float
+  riskLevel      String
+  recommendation String?
+
+  spectrogramUrl     String?
+  gradcamUrl         String?
+  overlayWaveformUrl String?
+  frequencyFocus     String?
+
+  frequencyBands FrequencyBand[]
+  reportPath     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FrequencyBand {
+  id String @id @default(cuid())
+
+  analysisId String
+  analysis   Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+
+  bandName    String
+  rangeHz     String
+  description String?
+  percentage  Float
+}

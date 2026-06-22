@@ -141,7 +141,7 @@ export default function DashboardPage() {
       <header className="flex items-start justify-between">
         <div className="animate-fade-in-up space-y-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            Selamat Datang di ParuScan AI
+            Selamat Datang di PulmoSense
           </h1>
           <p className="text-sm text-muted-foreground">
             Sistem Analisis Suara Paru-Paru berbasis AI (VGG16).
@@ -157,21 +157,6 @@ export default function DashboardPage() {
             <Bell className="h-5 w-5" />
             <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-slate-50" />
           </button>
-
-          {/* User info */}
-          <div className="flex items-center gap-3 rounded-xl bg-white px-4 py-2 shadow-sm ring-1 ring-border/60">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-600 text-xs font-bold text-white shadow-sm">
-              DH
-            </div>
-            <div className="text-right">
-              <p className="text-sm font-semibold leading-tight text-foreground">
-                Dr. Hendra
-              </p>
-              <p className="text-[11px] text-muted-foreground">
-                Pulmonologist
-              </p>
-            </div>
-          </div>
         </div>
       </header>
 
@@ -219,7 +204,7 @@ export default function DashboardPage() {
             <CardTitle className="text-base">Analisis Terbaru</CardTitle>
             <CardAction>
               <Link
-                href="/dashboard/riwayat"
+                href="/dashboard/riwayat-analisis"
                 className="inline-flex items-center gap-1 text-sm font-medium text-teal-600 transition-colors hover:text-teal-700"
               >
                 Lihat Semua

@@ -32,8 +32,8 @@ function buildSteps(modelName: string) {
     { id: 2, title: "Menyiapkan FormData" },
     {
       id: 3,
-      title: "Mengirim ke AI service",
-      subtitle: "FastAPI sedang memproses audio...",
+      title: "Mengirim ke sistem",
+      subtitle: "PulmoSense sedang memproses audio...",
     },
     { id: 4, title: `Menjalankan ${modelName.toUpperCase()}` },
     { id: 5, title: "Grad-CAM + Overlay Waveform" },
@@ -67,7 +67,7 @@ function getStatusText(result: StoredAnalysisResult | null, error: string | null
     return "Analisis selesai";
   }
 
-  return "AI sedang menganalisis";
+  return "sistem sedang menganalisis";
 }
 
 export default function ProsesAnalisisPage() {
@@ -161,7 +161,7 @@ export default function ProsesAnalisisPage() {
           setError(
             err instanceof Error
               ? err.message
-              : "AI service gagal memproses audio.",
+              : "sistem gagal memproses audio.",
           );
         }
       }
@@ -292,12 +292,12 @@ export default function ProsesAnalisisPage() {
             ) : (
               <div className="flex flex-col gap-2">
                 <h2 className="text-lg font-bold text-foreground">
-                  AI sedang menganalisis
+                  sedang menganalisis
                   <br />
                   pola suara paru...
                 </h2>
                 <p className="px-4 text-sm text-muted-foreground">
-                  Harap tunggu, request sedang dikirim ke FastAPI.
+                  Harap tunggu, request sedang dikirim ke sistem.
                 </p>
               </div>
             )}

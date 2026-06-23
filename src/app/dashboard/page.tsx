@@ -149,7 +149,7 @@ export default async function DashboardPage() {
             Selamat Datang, {firstName}
           </h1>
           <p className="text-sm text-muted-foreground">
-            Sistem Analisis Suara Paru-Paru berbasis AI (VGG16).
+            Sistem Analisis Suara Paru-Paru.
           </p>
         </div>
 
@@ -303,7 +303,7 @@ export default async function DashboardPage() {
         {/* ——— Alur Kerja AI ——— */}
         <Card className="col-span-2 animate-fade-in-up-4 border-0 bg-white shadow-sm ring-1 ring-border/50">
           <CardHeader>
-            <CardTitle className="text-base">Alur Kerja AI</CardTitle>
+            <CardTitle className="text-base">Alur Kerja</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="relative space-y-6">

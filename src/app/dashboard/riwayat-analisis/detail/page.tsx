@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import {
   AlertTriangle,
   ArrowLeft,
-  ExternalLink,
   FileAudio,
   RefreshCcw,
   Stethoscope,
@@ -22,6 +21,8 @@ import {
 import { prisma } from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 
+import { VisualizationGallery } from "./visualization-gallery";
+
 export const dynamic = "force-dynamic";
 
 type PageProps = {
@@ -38,39 +39,6 @@ function sortBands<T extends { bandName: string }>(bands: T[]) {
     const indexB = BAND_ORDER.indexOf(b.bandName);
     return (indexA === -1 ? 99 : indexA) - (indexB === -1 ? 99 : indexB);
   });
-}
-
-function PreviewImage({
-  title,
-  url,
-  alt,
-}: {
-  title: string;
-  url?: string | null;
-  alt: string;
-}) {
-  return (
-    <div className="group relative overflow-hidden rounded-xl border border-border/80 bg-slate-900">
-      <div className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between bg-slate-900/60 p-3 backdrop-blur-sm">
-        <span className="text-xs font-semibold text-white">{title}</span>
-        {url ? (
-          <a href={url} target="_blank" rel="noreferrer">
-            <ExternalLink className="h-4 w-4 text-white/70 hover:text-white" />
-          </a>
-        ) : null}
-      </div>
-      <div className="relative flex h-[220px] w-full items-center justify-center overflow-hidden">
-        {url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={url} alt={alt} className="h-full w-full object-cover" />
-        ) : (
-          <span className="px-6 text-center text-sm text-white/60">
-            Gambar belum tersedia.
-          </span>
-        )}
-      </div>
-    </div>
-  );
 }
 
 export default async function DetailHasilPrediksiPage({
@@ -212,21 +180,25 @@ export default async function DetailHasilPrediksiPage({
             <CardHeader>
               <CardTitle className="text-lg">Visualisasi Audio Paru</CardTitle>
             </CardHeader>
-            <CardContent className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-              <PreviewImage
-                title="STFT Spectrogram"
-                url={analysis.spectrogramUrl}
-                alt="STFT spectrogram hasil analisis"
-              />
-              <PreviewImage
-                title="Heatmap Grad-CAM"
-                url={analysis.gradcamUrl}
-                alt="Grad-CAM hasil analisis"
-              />
-              <PreviewImage
-                title="Overlay + Raw Waveform"
-                url={analysis.overlayWaveformUrl}
-                alt="Overlay Grad-CAM dan raw waveform hasil analisis"
+            <CardContent>
+              <VisualizationGallery
+                images={[
+                  {
+                    title: "STFT Spectrogram",
+                    url: analysis.spectrogramUrl,
+                    alt: "STFT spectrogram hasil analisis",
+                  },
+                  {
+                    title: "Heatmap Grad-CAM",
+                    url: analysis.gradcamUrl,
+                    alt: "Grad-CAM hasil analisis",
+                  },
+                  {
+                    title: "Overlay + Raw Waveform",
+                    url: analysis.overlayWaveformUrl,
+                    alt: "Overlay Grad-CAM dan raw waveform hasil analisis",
+                  },
+                ]}
               />
             </CardContent>
           </Card>

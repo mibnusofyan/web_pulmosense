@@ -1,3 +1,4 @@
+import { Logo } from "@/components/brand/logo";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import Link from "next/link";
 import { requireUser } from "@/lib/auth/session";
@@ -20,9 +21,7 @@ export default async function DashboardLayout({
         {/* ——— Footer ——— */}
         <footer className="border-t border-border/60 bg-white px-8 py-5">
           <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span className="font-semibold text-foreground/70">
-              PulmoSense
-            </span>
+            <Logo size="sm" />
             <div className="flex items-center gap-5">
               <Link href="#" className="transition-colors hover:text-foreground">
                 Terms of Service

@@ -7,12 +7,12 @@ import {
   LogOut,
   Settings,
   Users,
-  Waves,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { LogoMark, Wordmark } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
 import type { AuthUser } from "@/lib/auth/config";
 import { cn } from "@/lib/utils";
@@ -53,15 +53,15 @@ export function DashboardSidebar({ user }: { user: AuthUser }) {
 
   return (
     <aside className="fixed inset-y-0 left-0 z-30 flex w-[260px] flex-col border-r border-white/[0.06] bg-gradient-to-b from-[#0b2836] via-[#0e3344] to-[#091e2a]">
-      <div className="flex items-center gap-3 px-6 pb-8 pt-7">
-        <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-teal-400 to-cyan-500 shadow-lg shadow-teal-500/20">
-          <Waves className="size-5 text-white" />
-        </div>
+      <Link href="/dashboard" className="flex items-center gap-3 px-6 pb-8 pt-7">
+        <LogoMark className="size-10 shadow-lg shadow-teal-500/20" />
         <div>
-          <p className="text-[15px] font-bold text-white">PulmoSense</p>
+          <p className="text-[15px] font-bold">
+            <Wordmark tone="dark" />
+          </p>
           <p className="text-[11px] text-slate-400">AI Medical Assistant</p>
         </div>
-      </div>
+      </Link>
 
       <nav className="flex flex-1 flex-col gap-1 px-3">
         {navItems.map((item) => {

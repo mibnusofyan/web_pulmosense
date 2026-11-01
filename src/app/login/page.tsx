@@ -7,12 +7,12 @@ import {
   Lock,
   LogIn,
   Mail,
-  Waves,
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
+import { Logo, LogoMark, Wordmark } from "@/components/brand/logo";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
@@ -76,11 +76,11 @@ export default function LoginPage() {
       <main className="flex w-full items-center justify-center px-6 py-12 lg:w-[54%] lg:px-20">
         <div className="flex w-full max-w-[420px] flex-col gap-8">
           <div className="flex flex-col items-center gap-3 text-center">
-            <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-600 shadow-lg shadow-teal-500/25">
-              <Waves className="size-7 text-white" />
-            </div>
+            <LogoMark className="size-14 shadow-lg shadow-teal-500/25" />
             <div>
-              <h1 className="text-3xl font-bold text-foreground">PulmoSense</h1>
+              <h1 className="text-3xl font-bold">
+                <Wordmark />
+              </h1>
               <p className="mt-2 text-sm text-muted-foreground">
                 Masuk untuk mengakses dashboard analisis suara paru.
               </p>
@@ -169,6 +169,7 @@ export default function LoginPage() {
           priority
         />
         <div className="absolute inset-0 bg-slate-950/55" />
+        <Logo tone="dark" className="absolute left-10 top-10" />
         <div className="absolute inset-x-0 bottom-0 p-10 text-white">
           <p className="text-2xl font-semibold">Deteksi Dini, Penanganan Tepat</p>
           <p className="mt-3 max-w-md text-sm leading-relaxed text-white/70">

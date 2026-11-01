@@ -16,9 +16,9 @@ import {
   ShieldCheck,
   Stethoscope,
   UploadCloud,
-  Waves,
 } from "lucide-react";
 
+import { Logo } from "@/components/brand/logo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -540,20 +540,9 @@ function SectionHeading({
 }
 
 function BrandMark({ tone = "light" }: { tone?: "light" | "dark" }) {
-  const isDark = tone === "dark";
   return (
-    <Link href="/" className="flex w-fit items-center gap-3">
-      <span
-        className={cn(
-          "flex size-10 items-center justify-center rounded-lg",
-          isDark ? "bg-white/10 text-teal-200 ring-1 ring-white/18" : "bg-teal-600 text-white",
-        )}
-      >
-        <Waves className="size-5" />
-      </span>
-      <span className={cn("text-lg font-semibold", isDark ? "text-white" : "text-slate-950")}>
-        PulmoSense
-      </span>
+    <Link href="/" className="flex w-fit items-center">
+      <Logo tone={tone} />
     </Link>
   );
 }

@@ -11,6 +11,7 @@ import {
   X,
 } from "lucide-react";
 
+import { Logo } from "@/components/brand/logo";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -182,24 +183,7 @@ export default function ProsesAnalisisPage() {
     <div className="flex min-h-[calc(100vh-theme(spacing.16))] w-full items-center justify-center p-8">
       <Card className="flex w-full max-w-3xl flex-col overflow-hidden border-border/60 bg-white shadow-lg shadow-teal-900/5 md:flex-row">
         <div className="flex w-full flex-col items-center justify-center bg-slate-50/30 p-10 md:w-1/2">
-          <div className="mb-12 flex items-center justify-center gap-2">
-            <svg
-              className="h-8 w-8 text-teal-600"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
-              <path d="M8 12a4 4 0 1 0 8 0 4 4 0 1 0-8 0" />
-              <circle cx="12" cy="12" r="1" />
-            </svg>
-            <span className="text-2xl font-bold tracking-tight text-teal-800">
-              PulmoSense
-            </span>
-          </div>
+          <Logo size="lg" className="mb-12" />
 
           {!isFinished && !error ? (
             <div className="mb-8 flex h-16 items-end justify-center gap-1.5">
